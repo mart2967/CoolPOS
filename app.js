@@ -32,6 +32,11 @@ io.sockets.on('connection', function(socket){
     socket.on('my other event', function (data) {
         console.log(data);
     });
+    socket.on('button_click', function(data){
+       routes.addItemToRegister(data.item, function(){
+           socket.emit('update_client', routes.getRegisterItems());
+       });
+    });
 });
 
 app.get('/', routes.index);

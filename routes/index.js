@@ -28,7 +28,7 @@ exports.getAllItems = function(req, res){
     client.end();
 };
 
-exports.getRegisterItems = function(req, res) {
+exports.getRegisterItems = function() {
     var client = new Client();
     client.connect( cred );
     client.query('USE Adrian_John_Max_POS');
@@ -42,7 +42,7 @@ exports.getRegisterItems = function(req, res) {
     ).on('end',
         function() {
             //console.log(data);
-            res.send(data);
+            return data;
         });
     client.end();
 
