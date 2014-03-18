@@ -1,0 +1,51 @@
+<!DOCTYPE HTML>
+<HTML>
+<HEAD>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+
+    <!-- Optional theme -->
+    <!--<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">-->
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.0.0/backbone-min.js"></script>
+    <script src="/javascripts/item.js"></script>
+    <script src="/javascripts/itemCollection.js"></script>
+    <script src="/javascripts/registerItemCollection.js"></script>
+    <script src="/javascripts/buttonView.js"></script>
+    <script src="/javascripts/itemCollectionButtonView.js"></script>
+    <script src="/javascripts/selectView.js"></script>
+    <script src="/javascripts/selectItemView.js"></script>
+    <script src="/javascripts/pageView.js"></script>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+    var socket = io.connect('http://localhost');
+    socket.on('news', function (data) {
+        console.log(data);
+        socket.emit('my other event', { my: 'data' });
+    });
+    </script>
+
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+            var page = new PageView();
+        });
+    </script>
+
+
+</HEAD>
+<BODY>
+
+<div class="container">
+    <h1>Cool POS</h1>
+    <div id="buttons" class="col-lg-8"></div>
+    <div id="itemList" class="col-lg-4"></div>
+    total: <B ID="total">0</B>
+</div>
+</BODY>
+</HTML>
