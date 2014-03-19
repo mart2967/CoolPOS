@@ -6,6 +6,7 @@ var SelectView = Backbone.View.extend({
     className: 'form-control',
     attributes: {'size': '10'},
     initialize: function(){
+        console.log('selectBox init');
         var self = this;
         //this.collection = new RegisterItemCollection();
         this.collection.fetch({
@@ -15,16 +16,18 @@ var SelectView = Backbone.View.extend({
                 //self.select = new SelectView({collection: self.registerItems});
             },
             error: function(){
-                alert('error loading register data');
+                console.log('error loading register data');
             }
         });
-
 
         //this.render();
         //this.collection.on("add", this.addItemView, this);
 
     },
 
+    update: function(){
+
+    },
     addItemView: function(item){
         console.log(item);
         //var uniqueItemIds = _.pluck(this.collection.models, 'itemId');
@@ -35,11 +38,14 @@ var SelectView = Backbone.View.extend({
     },
 
     render: function(){
-//        var self = this;
-//        _.each(this.collection.models, (function(item){
-//            this.addItemView(item);
-//        }), this);
-        this.collection.each(this.addItemView);
+        this.$el.empty();
+        _.each(this.collection.models, (function(item, index){
+            //console.log(item);
+            var view = new SelectItemView({model: item});
+            this.$el.append(view.el);
+        }), this);
+        $('#itemList').html(this.$el);
+        //this.collection.each(this.addItemView);
     }
 
 });

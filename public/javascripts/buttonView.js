@@ -5,7 +5,7 @@ var ButtonView = Backbone.View.extend({
     className: 'col-md-3',
     template: _.template('<button type="button" id="<%= id %>" class="item btn btn-primary btn-lg" style="margin-bottom: 30px;"><%= item %></button>'),
     events: {
-        'click': 'saveItem'
+        //'click': 'saveItem'
     },
 
 
@@ -23,15 +23,16 @@ var ButtonView = Backbone.View.extend({
 
     saveItem: function(event){
         console.log('clicked');
-        this.model.save({
-            success: function(){
-                console.log('saved');
-            },
-            error: function(){
-                console.log('save error');
-            }
-
-        });
+        //console.log(this);
+//        this.model.save({
+//            success: function(){
+//                console.log('saved');
+//            },
+//            error: function(){
+//                console.log('save error');
+//            }
+//
+//        });
     }
 
 })

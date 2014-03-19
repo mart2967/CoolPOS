@@ -29,11 +29,12 @@ var ItemCollectionButtonView = Backbone.View.extend({
     },
 
     saveToRegister: function(event){
+        //console.log(this);
         //console.log(event.target.id)
         var modelIndex = event.target.id - 1;
         var clickedItem = this.collection.models[modelIndex];
-
-        //this.trigger('click', this.collection.models[modelIndex]);
+        //console.log(clickedItem);
+        this.trigger('click', clickedItem);
     }
 
 });

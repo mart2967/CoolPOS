@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
-<HTML>
-<HEAD>
+<html>
+<head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
 
@@ -20,32 +20,27 @@
     <script src="/javascripts/selectView.js"></script>
     <script src="/javascripts/selectItemView.js"></script>
     <script src="/javascripts/pageView.js"></script>
-
+    <script src="/javascripts/deleteButtonView.js"></script>
     <script src="/socket.io/socket.io.js"></script>
-    <script>
-    var socket = io.connect('http://localhost');
-    socket.on('news', function (data) {
-        console.log(data);
-        socket.emit('my other event', { my: 'data' });
-    });
-    </script>
 
 
     <script type="text/javascript">
         $(document).ready(function(){
             var page = new PageView();
+
         });
     </script>
 
 
-</HEAD>
-<BODY>
+</head>
+<body>
 
 <div class="container">
     <h1>Cool POS</h1>
     <div id="buttons" class="col-lg-8"></div>
     <div id="itemList" class="col-lg-4"></div>
-    total: <B ID="total">0</B>
+    <div id="delete_div"></div>
+    total: <b id="total">0</b>
 </div>
-</BODY>
-</HTML>
+</body>
+</html>

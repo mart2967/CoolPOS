@@ -1,15 +1,19 @@
 {
-  "name": "application-name",
-  "version": "0.0.1",
-  "private": true,
-  "scripts": {
-    "start": "node app.js"
-  },
-  "dependencies": {
-    "express": "3.4.8",
-    "hogan-express": "0.5.x",
-    "util": "~0.10.3",
-    "mariasql": "~0.1.20",
-    "socket.io": "~0.9.16"
-  }
+    "name": "application-name",
+    "version": "0.0.1",
+    "private": true,
+    "scripts": {
+        "start": "node app.js"
+    },
+    "dependencies": {
+        "express": "3.4.8",
+        "hogan-express": "0.5.x",
+        "util": "~0.10.3",
+        "mariasql": "~0.1.20",
+        "socket.io": "~0.9.16"
+
+    },
+    "devDependencies": {
+        "nodemon": "~1.0.15"
+    }
 }

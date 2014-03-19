@@ -28,7 +28,7 @@ exports.getAllItems = function(req, res){
     client.end();
 };
 
-exports.getRegisterItems = function() {
+exports.getRegisterItems = function(req,res) {
     var client = new Client();
     client.connect( cred );
     client.query('USE Adrian_John_Max_POS');
@@ -42,16 +42,25 @@ exports.getRegisterItems = function() {
     ).on('end',
         function() {
             //console.log(data);
-            return data;
+            res.send(data);
         });
     client.end();
 
 
 }
 
-exports.saveItemToRegister = function(req,res){
-    console.log(req.body);
-    var data = req.body;
+exports.deleteAllFromRegister = function(callback){
+    var client = new Client();
+    client.connect( cred );
+    client.query('USE Adrian_John_Max_POS');
+    client.query('TRUNCATE TABLE Register');
+    callback();
+    return;
+}
+
+exports.saveItemToRegister = function(data, callback){
+    console.log(data);
+    //var data = req.body;
     var client = new Client();
     var values = getValues(data);
     client.connect( cred );
@@ -59,7 +68,13 @@ exports.saveItemToRegister = function(req,res){
     client.query('USE Adrian_John_Max_POS');
     client.query('INSERT INTO Register (itemID, label, price, amount, tid) VALUES (' + values + ')');
     console.log("Inserted: " + values);
-    res.send(200);
+//    client.query('SELECT * FROM Register').on('result', function(result){
+//        result.on('row', function(row){
+//           console.log(row);
+//        });
+//    });
+    callback();
+    return;
 }
 
 var getValues = function(data) {
