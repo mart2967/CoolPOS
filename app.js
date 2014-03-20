@@ -35,16 +35,21 @@ io.sockets.on('connection', function(socket){
         });
     });
     socket.on('delete_all', function(){
-        console.log('server deleting...');
+        //console.log('server deleting...');
         routes.deleteAllFromRegister(function(){
             socket.emit('update_client');
         })
+    });
+    socket.on('delete_selected', function(selected){
+        routes.deleteSelectedFromRegister(selected, function(){
+            socket.emit('update_client');
+        });
     });
 });
 
 app.get('/', routes.index);
 app.get('/allItems', routes.getAllItems);
-app.get('/registerItems', routes.getRegisterItems)
+app.get('/registerItems', routes.getRegisterItems);
 
 //app.put('/item', routes.saveItemToRegister);
 

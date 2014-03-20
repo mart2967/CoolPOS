@@ -24,7 +24,7 @@ var ItemCollectionButtonView = Backbone.View.extend({
             this.$el.append(view.el);
         }), this);
         this.$el.append('</div>');
-        console.log(this.$el);
+        //console.log(this.$el);
         return this;
     },
 

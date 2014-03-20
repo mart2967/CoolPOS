@@ -8,12 +8,16 @@ var PageView = Backbone.View.extend({
 
         var self = this;
         this.items = new ItemCollection();
-
+        this.user = '';
+        while(this.user == ''){
+            this.user = window.prompt('Please Enter Your Name','Adrian');
+        }
         this.items.fetch({
             success: function(){
                 self.buttons = new ItemCollectionButtonView({collection: self.items });
                 self.select = new SelectView({collection: new RegisterItemCollection()});
-                self.deleteButton = new DeleteButtonView();
+                self.deleteButton = new DeleteButtonView({model:{label: 'Delete All'}});
+                self.deleteSelButton = new DeleteButtonView({model:{label: 'Delete Selected'}});
                 self.initHandlers();
                 self.render();
             },
@@ -28,6 +32,7 @@ var PageView = Backbone.View.extend({
         $('#buttons').html(this.buttons.$el);
         this.select.render();
         $('#delete_div').html(this.deleteButton.$el);
+        $('#delete_div').append(this.deleteSelButton.$el);
     },
 
     initSocket: function(){
@@ -45,8 +50,13 @@ var PageView = Backbone.View.extend({
             console.log('deleting all items');
             this.socket.emit('delete_all');
         });
+        this.listenTo(this.deleteSelButton, 'delete', function(selected){
+            console.log('deleting selected items: ' + selected);
+            this.socket.emit('delete_selected', selected);
+        });
         this.listenTo(this.buttons, 'click', function(button){
-            console.log(button.attributes);
+            button.attributes.user = this.user;
+            //console.log(button.attributes);
             this.socket.emit('button_click', button.attributes)
 
 

@@ -49,11 +49,25 @@ exports.getRegisterItems = function(req,res) {
 
 }
 
+exports.deleteSelectedFromRegister = function(selected, callback){
+    console.log(selected);
+    var client = new Client();
+    client.connect( cred );
+    client.query('USE Adrian_John_Max_POS');
+    for(var i = 0; i < selected.length; i++){
+        client.query('DELETE FROM Register WHERE id=' + selected[i]);
+    }
+    client.on('end', callback());
+
+    return;
+}
+
 exports.deleteAllFromRegister = function(callback){
     var client = new Client();
     client.connect( cred );
     client.query('USE Adrian_John_Max_POS');
     client.query('TRUNCATE TABLE Register');
+    client.end();
     callback();
     return;
 }
@@ -66,7 +80,7 @@ exports.saveItemToRegister = function(data, callback){
     client.connect( cred );
     //console.log(cred);
     client.query('USE Adrian_John_Max_POS');
-    client.query('INSERT INTO Register (itemID, label, price, amount, tid) VALUES (' + values + ')');
+    client.query('INSERT INTO Register (itemID, label, price, amount, tid, time_stamp, user) VALUES (' + values + ')');
     console.log("Inserted: " + values);
 //    client.query('SELECT * FROM Register').on('result', function(result){
 //        result.on('row', function(row){
@@ -77,12 +91,25 @@ exports.saveItemToRegister = function(data, callback){
     return;
 }
 
-var getValues = function(data) {
-    itemID = data.id;
-    label = data.item;
-    price = data.price_per_unit;
-    amount = 1;
-    tid = 1;
+var getCurrentDateTime = function(){
+    var d = new Date();
+    var year = d.getFullYear();
+    var month = d.getMonth()
+    var day = d.getDate();
+    var hour = d.getHours();
+    var minute = d.getMinutes();
+    var second = d.getSeconds();
 
-    return itemID + ", '" + label + "', " + price + ", " + amount + ", " + tid;
+    return year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
+}
+
+var getValues = function(data) {
+    var itemID = data.id;
+    var label = data.item;
+    var price = data.price_per_unit;
+    var amount = 1;
+    var tid = 1;
+    var time = getCurrentDateTime();
+    var user = data.user;
+    return itemID + ", '" + label + "', " + price + ", " + amount + ", " + tid + ", '" + time + "', '" + user + "'";
 }

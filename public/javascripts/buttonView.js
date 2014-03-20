@@ -3,6 +3,7 @@
  */
 var ButtonView = Backbone.View.extend({
     className: 'col-md-3',
+
     template: _.template('<button type="button" id="<%= id %>" class="item btn btn-primary btn-lg" style="margin-bottom: 30px;"><%= item %></button>'),
     events: {
         //'click': 'saveItem'

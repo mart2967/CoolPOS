@@ -2,16 +2,24 @@
  * Created by mart2967 on 3/5/14.
  */
 var SelectView = Backbone.View.extend({
+    htmlId: 'itemList',
     tagName: 'select multiple',
     className: 'form-control',
     attributes: {'size': '10'},
+    events: {
+      'all':'test'
+    },
+    test:function(){
+        console.log(this);
+    },
+
     initialize: function(){
-        console.log('selectBox init');
+        //console.log('selectBox init');
         var self = this;
         //this.collection = new RegisterItemCollection();
         this.collection.fetch({
             success: function(){
-                console.log(self.collection);
+                //console.log(self.collection);
                 self.render();
                 //self.select = new SelectView({collection: self.registerItems});
             },
@@ -21,7 +29,7 @@ var SelectView = Backbone.View.extend({
         });
 
         //this.render();
-        //this.collection.on("add", this.addItemView, this);
+
 
     },
 
