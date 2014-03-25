@@ -1,6 +1,9 @@
 var inspect = require('util').inspect;
 var Client = require('mariasql');
 var cred = require('../credentials').credentials; // a hash of login info for the database
+var client = new Client();
+client.connect( cred );
+client.query('USE Adrian_John_Max_POS');
 
 exports.index = function(req, res){
     res.render('index');
@@ -8,10 +11,6 @@ exports.index = function(req, res){
 
 exports.getAllItems = function(req, res){
 
-    var client = new Client();
-    client.connect( cred );
-    //console.log(cred);
-    client.query('USE Adrian_John_Max_POS');
     var data = new Array();
     client.query('SELECT * from Inventory').on('result',
         function(result) {
@@ -22,16 +21,11 @@ exports.getAllItems = function(req, res){
         }
     ).on('end',
         function() {
-            //console.log(data);
             res.send(data);
         });
-    client.end();
 };
 
 exports.getRegisterItems = function(req,res) {
-    var client = new Client();
-    client.connect( cred );
-    client.query('USE Adrian_John_Max_POS');
     var data = new Array();
     client.query('SELECT * from Register').on('result',
         function(result) {
@@ -41,53 +35,47 @@ exports.getRegisterItems = function(req,res) {
         }
     ).on('end',
         function() {
-            //console.log(data);
             res.send(data);
         });
-    client.end();
-
-
 }
 
 exports.deleteSelectedFromRegister = function(selected, callback){
-    console.log(selected);
-    var client = new Client();
-    client.connect( cred );
-    client.query('USE Adrian_John_Max_POS');
-    for(var i = 0; i < selected.length; i++){
-        client.query('DELETE FROM Register WHERE id=' + selected[i]);
-    }
-    client.on('end', callback());
+    //console.log(selected);
+    client.query('DELETE FROM Register WHERE id IN ' + formatIDList(selected)).on('end', function(){
+        callback();
+    });
 
     return;
 }
 
+formatIDList = function(data){
+    var out = '(';
+    for(var i = 0; i < data.length; i++){
+        out += data[i];
+        if(i != data.length - 1){
+            out += ', ';
+        }
+    }
+    out += ')';
+    return out;
+}
+
 exports.deleteAllFromRegister = function(callback){
-    var client = new Client();
-    client.connect( cred );
-    client.query('USE Adrian_John_Max_POS');
-    client.query('TRUNCATE TABLE Register');
-    client.end();
-    callback();
+    client.query('TRUNCATE TABLE Register').on('end', function(){
+        callback();
+    });
+    //client.end();
     return;
 }
 
 exports.saveItemToRegister = function(data, callback){
     console.log(data);
-    //var data = req.body;
-    var client = new Client();
     var values = getValues(data);
-    client.connect( cred );
-    //console.log(cred);
-    client.query('USE Adrian_John_Max_POS');
-    client.query('INSERT INTO Register (itemID, label, price, amount, tid, time_stamp, user) VALUES (' + values + ')');
-    console.log("Inserted: " + values);
-//    client.query('SELECT * FROM Register').on('result', function(result){
-//        result.on('row', function(row){
-//           console.log(row);
-//        });
-//    });
-    callback();
+    client.query('INSERT INTO Register (itemID, label, price, amount, tid, time_stamp, user) VALUES (' + values + ')').on('end', function(){
+        console.log("Inserted: " + values);
+        callback();
+    });
+
     return;
 }
 

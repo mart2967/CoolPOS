@@ -3,7 +3,7 @@
  */
 var SelectItemView = Backbone.View.extend({
     tagName: 'option',
-    template: _.template('<%= label %>'),
+    template: _.template('<span><%= label %></span> $<%= price %>'),
     
 
     initialize: function(){

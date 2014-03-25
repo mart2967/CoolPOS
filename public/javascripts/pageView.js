@@ -16,8 +16,8 @@ var PageView = Backbone.View.extend({
             success: function(){
                 self.buttons = new ItemCollectionButtonView({collection: self.items });
                 self.select = new SelectView({collection: new RegisterItemCollection()});
-                self.deleteButton = new DeleteButtonView({model:{label: 'Delete All'}});
-                self.deleteSelButton = new DeleteButtonView({model:{label: 'Delete Selected'}});
+                self.deleteButton = new DeleteButtonView({model:{label: 'Delete All', type: 'deleteAll'}});
+                self.deleteSelButton = new DeleteButtonView({model:{label: 'Delete Selected', type: 'deleteSelected'}});
                 self.initHandlers();
                 self.render();
             },
@@ -41,17 +41,16 @@ var PageView = Backbone.View.extend({
         this.socket.on('update_client', function () {
             console.log('client updating...');
             self.select.initialize();
-            //$('#itemList').html(self.select.$el);
         });
     },
 
     initHandlers: function(){
-        this.listenTo(this.deleteButton, 'delete', function(){
-            console.log('deleting all items');
+        this.listenTo(this.deleteButton, 'deleteAll', function(){
+            //console.log('deleting all items');
             this.socket.emit('delete_all');
         });
-        this.listenTo(this.deleteSelButton, 'delete', function(selected){
-            console.log('deleting selected items: ' + selected);
+        this.listenTo(this.deleteSelButton, 'deleteSelected', function(selected){
+            //console.log('deleting selected items: ' + selected);
             this.socket.emit('delete_selected', selected);
         });
         this.listenTo(this.buttons, 'click', function(button){

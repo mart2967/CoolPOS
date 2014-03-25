@@ -9,14 +9,9 @@ var SelectView = Backbone.View.extend({
     events: {
       'all':'test'
     },
-    test:function(){
-        console.log(this);
-    },
 
     initialize: function(){
-        //console.log('selectBox init');
         var self = this;
-        //this.collection = new RegisterItemCollection();
         this.collection.fetch({
             success: function(){
                 //console.log(self.collection);
@@ -27,33 +22,18 @@ var SelectView = Backbone.View.extend({
                 console.log('error loading register data');
             }
         });
-
-        //this.render();
-
-
-    },
-
-    update: function(){
-
-    },
-    addItemView: function(item){
-        console.log(item);
-        //var uniqueItemIds = _.pluck(this.collection.models, 'itemId');
-        //console.log(uniqueItemIds);
-        //if (this.collection.indexOf)
-        var view = new SelectItemView({ model: item });
-        this.$el.append(view.$el);
     },
 
     render: function(){
         this.$el.empty();
-        _.each(this.collection.models, (function(item, index){
-            //console.log(item);
-            var view = new SelectItemView({model: item});
+        var total = 0;
+        _.each(this.collection.models, (function(item){
+            total += parseFloat(item.attributes.price);
+            var view = new SelectItemView({model: item, id: item.id});
             this.$el.append(view.el);
         }), this);
         $('#itemList').html(this.$el);
-        //this.collection.each(this.addItemView);
+        $('#total').html('<span class="col-lg-6"><b>Total: ' + total.toFixed(2) + '</b></span>');
     }
 
 });
