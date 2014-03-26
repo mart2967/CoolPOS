@@ -28,14 +28,16 @@ if ('development' == app.get('env')) {
 }
 
 io.sockets.on('connection', function(socket){
+    routes.getUserList(function(list){
+        console.log(list);
+        socket.emit('user_list', list);
+    });
     socket.on('button_click', function(data){
-        //console.log('received button click: ' + data)
         routes.saveItemToRegister(data, function(){
             socket.emit('update_client');
         });
     });
     socket.on('delete_all', function(){
-        //console.log('server deleting...');
         routes.deleteAllFromRegister(function(){
             socket.emit('update_client');
         })
@@ -50,8 +52,6 @@ io.sockets.on('connection', function(socket){
 app.get('/', routes.index);
 app.get('/allItems', routes.getAllItems);
 app.get('/registerItems', routes.getRegisterItems);
-
-//app.put('/item', routes.saveItemToRegister);
 
 server.listen(app.get('port'), function(){
     console.log('Express server listening on port ' + app.get('port'));

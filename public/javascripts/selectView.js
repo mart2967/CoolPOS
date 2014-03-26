@@ -5,18 +5,13 @@ var SelectView = Backbone.View.extend({
     htmlId: 'itemList',
     tagName: 'select multiple',
     className: 'form-control',
-    attributes: {'size': '10'},
-    events: {
-      'all':'test'
-    },
+    attributes: {'size': '15'},
 
     initialize: function(){
         var self = this;
         this.collection.fetch({
             success: function(){
-                //console.log(self.collection);
                 self.render();
-                //self.select = new SelectView({collection: self.registerItems});
             },
             error: function(){
                 console.log('error loading register data');
@@ -33,7 +28,7 @@ var SelectView = Backbone.View.extend({
             this.$el.append(view.el);
         }), this);
         $('#itemList').html(this.$el);
-        $('#total').html('<span class="col-lg-6"><b>Total: ' + total.toFixed(2) + '</b></span>');
+        $('#total').html('<b>Total: $' + total.toFixed(2) + '</b>');
     }
 
 });

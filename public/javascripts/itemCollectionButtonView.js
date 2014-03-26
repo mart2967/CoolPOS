@@ -15,7 +15,7 @@ var ItemCollectionButtonView = Backbone.View.extend({
         this.$el.append('<div class=row">');
         _.each(this.collection.models, (function(item, index) {
             var view;
-            view = new ButtonView({
+            view = new ItemButtonView({
                 model: item
             });
             if (index % this.columns == 0 && index > 0){

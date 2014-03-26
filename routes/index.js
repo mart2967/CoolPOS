@@ -9,32 +9,38 @@ exports.index = function(req, res){
     res.render('index');
 };
 
+exports.getUserList = function(callback){
+    var users = new Array();
+    client.query('SELECT name FROM Employee').on('result', function(result) {
+        result.on('row', function(row){
+            users.push(row.name);
+        });
+    }).on('end', function() {
+            //console.log(users);
+        callback(users);
+    });
+}
+
 exports.getAllItems = function(req, res){
 
     var data = new Array();
-    client.query('SELECT * from Inventory').on('result',
-        function(result) {
-            result.on('row', function(row){
-                //console.log(row);
-                data.push(row);
-            });
-        }
-    ).on('end',
-        function() {
-            res.send(data);
+    client.query('SELECT * from Inventory').on('result', function(result) {
+        result.on('row', function(row){
+            //console.log(row);
+            data.push(row);
         });
+    }).on('end', function() {
+        res.send(data);
+    });
 };
 
 exports.getRegisterItems = function(req,res) {
     var data = new Array();
-    client.query('SELECT * from Register').on('result',
-        function(result) {
-            result.on('row', function(row){
-                data.push(row);
-            });
-        }
-    ).on('end',
-        function() {
+    client.query('SELECT * from Register').on('result', function(result) {
+        result.on('row', function(row){
+            data.push(row);
+        });
+    }).on('end', function() {
             res.send(data);
         });
 }

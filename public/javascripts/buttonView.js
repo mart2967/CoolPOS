@@ -1,39 +1,42 @@
-/**
- * Created by mart2967 on 3/4/14.
- */
 var ButtonView = Backbone.View.extend({
-    className: 'col-md-3',
-
-    template: _.template('<button type="button" id="<%= id %>" class="item btn btn-primary btn-lg" style="margin-bottom: 30px;"><%= item %></button>'),
-    events: {
-        //'click': 'saveItem'
+    tagName: 'div',
+    className: 'col-lg-3 col-md-4 col-xs-6',
+    attributes: {
+      style: 'margin-top: 20px'
     },
-
-
-    //template: _.template('<div style="position: absolute; top: <%= top_margin %>;left: <%= left_margin %>">' +
-    //            '<button id="<%= id %>", class="item btn btn-primary"><%= label %></button></div>'),
+    template: _.template('<button type="button" class="btn <%= buttonClass %>" ><%= label %></button>'),
+    events: {
+        'click button.deleteSelected': 'fireDeleteSelected',
+        'click button.deleteAll': 'fireDeleteAll',
+        'click button.postTransaction': 'firePostTransaction'
+    },
     initialize: function() {
 
         this.render();
+    },
 
+    firePostTransaction: function(event) {
+
+    },
+
+    fireDeleteAll: function(){
+        this.trigger('deleteAll');
+    },
+
+
+    fireDeleteSelected: function(){
+        var sel = $('#itemList option:selected');
+        var selected = new Object();
+
+        for(var i = 0; i < sel.length; i++){
+            selected[i] = sel[i].id;
+        }
+        selected.length = sel.length;
+        //console.log(selected);
+        this.trigger('deleteSelected', selected);
     },
 
     render: function() {
-        this.$el.html(this.template(this.model.toJSON()));
-    },
-
-    saveItem: function(event){
-        console.log('clicked');
-        //console.log(this);
-//        this.model.save({
-//            success: function(){
-//                console.log('saved');
-//            },
-//            error: function(){
-//                console.log('save error');
-//            }
-//
-//        });
+        this.$el.html(this.template(this.model));
     }
-
-})
+});
