@@ -9,6 +9,36 @@ exports.index = function(req, res){
     res.render('index');
 };
 
+exports.postTransaction = function(type, callback) {
+    var transactionItems = new Object();
+    client.query('SELECT * FROM Register').on('result', function(result){
+        result.on('row', function(row){
+            console.log(row.itemID);
+            if(transactionItems[row.itemID] === undefined){
+                transactionItems[row.itemID] = new Object();
+                transactionItems[row.itemID].quantity = 1;
+                transactionItems[row.itemID].unit_price = row.price;
+            } else {
+                transactionItems[row.itemID].quantity += 1;
+            }
+
+        });
+    }).on('end', function(){
+            //calculate the total price from the type and quantity
+            //transactionItems[row.itemID].total_price = calculateTotal(row.itemID, transactionItems[row.itemID].quantity);
+            //here's a placeholder, FIX WHEN DEALS
+            for(var itemType in transactionItems){
+                transactionItems[itemType].total_price = transactionItems[itemType].unit_price * transactionItems[itemType].quantity;
+            }
+            console.log(transactionItems);
+        });
+    //client.query('INSERT INTO Transaction (till_id, employee_id, customer_id, end_time, type) VALUES ')
+}
+
+calculateTotal = function(itemID, quantity){
+
+}
+
 exports.getUserList = function(callback){
     var users = new Array();
     client.query('SELECT name FROM Employee').on('result', function(result) {
@@ -16,9 +46,8 @@ exports.getUserList = function(callback){
             users.push(row.name);
         });
     }).on('end', function() {
-            //console.log(users);
-        callback(users);
-    });
+            callback(users);
+        });
 }
 
 exports.getAllItems = function(req, res){
@@ -26,12 +55,11 @@ exports.getAllItems = function(req, res){
     var data = new Array();
     client.query('SELECT * from Inventory').on('result', function(result) {
         result.on('row', function(row){
-            //console.log(row);
             data.push(row);
         });
     }).on('end', function() {
-        res.send(data);
-    });
+            res.send(data);
+        });
 };
 
 exports.getRegisterItems = function(req,res) {
@@ -46,7 +74,6 @@ exports.getRegisterItems = function(req,res) {
 }
 
 exports.deleteSelectedFromRegister = function(selected, callback){
-    //console.log(selected);
     client.query('DELETE FROM Register WHERE id IN ' + formatIDList(selected)).on('end', function(){
         callback();
     });
@@ -70,7 +97,6 @@ exports.deleteAllFromRegister = function(callback){
     client.query('TRUNCATE TABLE Register').on('end', function(){
         callback();
     });
-    //client.end();
     return;
 }
 
@@ -81,7 +107,6 @@ exports.saveItemToRegister = function(data, callback){
         console.log("Inserted: " + values);
         callback();
     });
-
     return;
 }
 

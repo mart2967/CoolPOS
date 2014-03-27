@@ -41,18 +41,19 @@
     <nav class="navbar navbar-default" role="navigation">
         <div class="container-fluid">
             <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header">
+            <div class="navbar-header navbar-right">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
                     <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">Cool POS</a>
+                <div id="total" class="navbar-brand"></div>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <a class="navbar-brand" href="#">Cool POS</a>
                 <ul class="nav navbar-nav">
                     <li class="active"><a href="#" id="currentUser">Current User: </a></li>
                     <li class="dropdown" id="userList">
@@ -61,11 +62,10 @@
 
                     </li>
                 </ul>
-                <div class="navbar-header navbar-right">
-                    <div id="total" style="margin:0px" class="navbar-brand"></div>
-                </div>
+
 
             </div>
+
         </div>
     </nav>
 
@@ -73,9 +73,14 @@
     <div class="row">
         <div id="buttons" class="col-md-8"></div>
         <div id="right" class="col-md-4">
+            <div id="payment" class="row">
+                <span class="col-xs-3">
+                    <h5><b>Pay With:</b></h5>
+                </span>
+            </div>
             <div id="itemList"></div>
             <div id="delete_div" class="row"></div>
-            <div class="row"></div>
+
         </div>
     </div>
 </div>

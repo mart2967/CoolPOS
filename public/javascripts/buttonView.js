@@ -1,22 +1,32 @@
 var ButtonView = Backbone.View.extend({
     tagName: 'div',
-    className: 'col-lg-3 col-md-4 col-xs-6',
+    className: '',
     attributes: {
-      style: 'margin-top: 20px'
     },
     template: _.template('<button type="button" class="btn <%= buttonClass %>" ><%= label %></button>'),
     events: {
         'click button.deleteSelected': 'fireDeleteSelected',
         'click button.deleteAll': 'fireDeleteAll',
-        'click button.postTransaction': 'firePostTransaction'
+        'click button.postCash': 'firePostCash',
+        'click button.postCheck': 'firePostCheck',
+        'click button.postCredit': 'firePostCredit'
     },
     initialize: function() {
 
         this.render();
     },
 
-    firePostTransaction: function(event) {
+    firePostCash: function() {
+        //console.log(event);
+        this.trigger('post_transaction', 'cash');
+    },
 
+    firePostCheck: function() {
+        this.trigger('post_transaction', 'check');
+    },
+
+    firePostCredit: function() {
+        this.trigger('post_transaction', 'credit');
     },
 
     fireDeleteAll: function(){

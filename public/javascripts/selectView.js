@@ -5,7 +5,10 @@ var SelectView = Backbone.View.extend({
     htmlId: 'itemList',
     tagName: 'select multiple',
     className: 'form-control',
-    attributes: {'size': '15'},
+    attributes: {
+        'size': '15',
+        'style': 'margin-bottom:20px; margin-top:20px'
+    },
 
     initialize: function(){
         var self = this;

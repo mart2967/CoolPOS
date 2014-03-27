@@ -47,6 +47,11 @@ io.sockets.on('connection', function(socket){
             socket.emit('update_client');
         });
     });
+    socket.on('post_transaction', function(type){
+       routes.postTransaction(type, function(confirmation){
+           socket.emit('update_client', confirmation);
+       })
+    });
 });
 
 app.get('/', routes.index);

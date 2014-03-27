@@ -7,13 +7,34 @@ var PageView = Backbone.View.extend({
         this.initSocket()
         var self = this;
         this.items = new ItemCollection();
+        this.paymentButtons = new Array();
 
         this.items.fetch({
             success: function(){
-                self.buttons = new ItemCollectionButtonView({collection: self.items });
+                self.itemButtons = new ItemCollectionButtonView({collection: self.items });
                 self.select = new SelectView({collection: new RegisterItemCollection()});
-                self.deleteButton = new ButtonView({model:{label: 'Delete All', buttonClass: 'btn-danger deleteAll'}});
-                self.deleteSelButton = new ButtonView({model:{label: 'Delete Selected', buttonClass: 'btn-danger deleteSelected'}});
+                self.deleteButton = new ButtonView({
+                    model: {label: 'Delete All', buttonClass: 'btn-danger deleteAll'},
+                    className: 'col-lg-3 col-md-4 col-xs-6'
+                });
+                self.deleteSelButton = new ButtonView({
+                    model:{label: 'Delete Selected', buttonClass: 'btn-danger deleteSelected'},
+                    className: 'col-lg-3 col-md-4 col-xs-6'
+                });
+                /*self.payWithCash = */ self.paymentButtons.push( new ButtonView({
+                    model:{label: 'Cash', buttonClass:'btn-success postCash'},
+                    className: 'col-xs-3'
+                }));
+                /*self.payWithCheck =*/ self.paymentButtons.push( new ButtonView({
+                    model:{label: 'Check', buttonClass:'btn-success postCheck'},
+                    className: 'col-xs-3'
+                }));
+                /*self.payWithCredit = */ self.paymentButtons.push( new ButtonView({
+                    model:{label: 'Credit', buttonClass:'btn-success postCredit'},
+                    className: 'col-xs-3'
+                }));
+
+
                 self.initHandlers();
                 self.render();
             },
@@ -25,9 +46,15 @@ var PageView = Backbone.View.extend({
     },
 
     render: function(){
-        $('#buttons').html(this.buttons.$el);
+        $('#buttons').html(this.itemButtons.$el);
         this.select.render();
-        $('#delete_div').html(this.deleteButton.$el);
+        this.paymentButtons.forEach(function(button){
+            $('#payment').append(button.$el);
+        });
+//        $('#payment').append(this.payWithCash.$el);
+//        $('#payment').append(this.payWithCredit.$el);
+//        $('#payment').append(this.payWithCheck.$el);
+        $('#delete_div').append(this.deleteButton.$el);
         $('#delete_div').append(this.deleteSelButton.$el);
     },
 
@@ -50,19 +77,19 @@ var PageView = Backbone.View.extend({
     },
 
     initHandlers: function(){
-//        this.listenTo(this.userSelect, 'changeUser', function(userName){
-//            this.user = userName;
-//            $('#currentUser').text('Current User: ' + this.user);
-//        });
+        var self = this;
+        this.paymentButtons.forEach(function(button){
+            self.listenTo(button, 'post_transaction', function(type) {
+                self.socket.emit('post_transaction', type);
+            });
+        });
         this.listenTo(this.deleteButton, 'deleteAll', function(){
-            //console.log('deleting all items');
             this.socket.emit('delete_all');
         });
         this.listenTo(this.deleteSelButton, 'deleteSelected', function(selected){
-            //console.log('deleting selected items: ' + selected);
             this.socket.emit('delete_selected', selected);
         });
-        this.listenTo(this.buttons, 'click', function(button){
+        this.listenTo(this.itemButtons, 'click', function(button){
             button.attributes.user = this.user;
             this.socket.emit('button_click', button.attributes)
         });
