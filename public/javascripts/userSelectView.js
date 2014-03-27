@@ -9,7 +9,8 @@ var UserSelectView = Backbone.View.extend({
     },
 
     changeUser: function(event){
-        this.trigger('changeUser', event.target.innerText);
+        console.log(event.target);
+        this.trigger('changeUser', {name:event.target.innerText, id:event.target.id});
     },
 
     initialize: function(){
@@ -17,8 +18,9 @@ var UserSelectView = Backbone.View.extend({
     },
 
     render: function(){
+        console.log(this.model[0].name);
         for(var i = 0; i < this.model.length; i++) {
-            this.$el.append('<li><a href="#" class="user">' + this.model[i] + '</a></li>');
+            this.$el.append('<li><a href="#" class="user" id="' + this.model[i].id + '">' + this.model[i].name + '</a></li>');
         }
         $('#userList').append(this.$el);
     }

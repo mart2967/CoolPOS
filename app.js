@@ -29,7 +29,6 @@ if ('development' == app.get('env')) {
 
 io.sockets.on('connection', function(socket){
     routes.getUserList(function(list){
-        console.log(list);
         socket.emit('user_list', list);
     });
     socket.on('button_click', function(data){
@@ -47,8 +46,9 @@ io.sockets.on('connection', function(socket){
             socket.emit('update_client');
         });
     });
-    socket.on('post_transaction', function(type){
-       routes.postTransaction(type, function(confirmation){
+    socket.on('post_transaction', function(data){
+       routes.postTransaction(data, function(confirmation){
+           //console.log('data: ' + data);
            socket.emit('update_client', confirmation);
        })
     });

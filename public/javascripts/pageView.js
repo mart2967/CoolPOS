@@ -21,19 +21,18 @@ var PageView = Backbone.View.extend({
                     model:{label: 'Delete Selected', buttonClass: 'btn-danger deleteSelected'},
                     className: 'col-lg-3 col-md-4 col-xs-6'
                 });
-                /*self.payWithCash = */ self.paymentButtons.push( new ButtonView({
+                self.paymentButtons.push( new ButtonView({
                     model:{label: 'Cash', buttonClass:'btn-success postCash'},
                     className: 'col-xs-3'
                 }));
-                /*self.payWithCheck =*/ self.paymentButtons.push( new ButtonView({
+                self.paymentButtons.push( new ButtonView({
                     model:{label: 'Check', buttonClass:'btn-success postCheck'},
                     className: 'col-xs-3'
                 }));
-                /*self.payWithCredit = */ self.paymentButtons.push( new ButtonView({
+                self.paymentButtons.push( new ButtonView({
                     model:{label: 'Credit', buttonClass:'btn-success postCredit'},
                     className: 'col-xs-3'
                 }));
-
 
                 self.initHandlers();
                 self.render();
@@ -51,9 +50,6 @@ var PageView = Backbone.View.extend({
         this.paymentButtons.forEach(function(button){
             $('#payment').append(button.$el);
         });
-//        $('#payment').append(this.payWithCash.$el);
-//        $('#payment').append(this.payWithCredit.$el);
-//        $('#payment').append(this.payWithCheck.$el);
         $('#delete_div').append(this.deleteButton.$el);
         $('#delete_div').append(this.deleteSelButton.$el);
     },
@@ -62,12 +58,13 @@ var PageView = Backbone.View.extend({
         var self = this;
         this.socket = io.connect('http://localhost');
         this.socket.on('user_list', function(list){
+            console.log(list);
             self.user = list[0];
-            $('#currentUser').text('Current User: ' + self.user);
+            $('#currentUser').text('Current User: ' + self.user.name);
             self.userSelect = new UserSelectView({model:list});
-            self.userSelect.on('changeUser', function(userName){
-                self.user = userName;
-                $('#currentUser').text('Current User: ' + self.user);
+            self.userSelect.on('changeUser', function(user){
+                self.user = user;
+                $('#currentUser').text('Current User: ' + self.user.name);
             });
         });
         this.socket.on('update_client', function () {
@@ -80,7 +77,8 @@ var PageView = Backbone.View.extend({
         var self = this;
         this.paymentButtons.forEach(function(button){
             self.listenTo(button, 'post_transaction', function(type) {
-                self.socket.emit('post_transaction', type);
+                console.log(self.user);
+                self.socket.emit('post_transaction', {type:type, userID:self.user.id});
             });
         });
         this.listenTo(this.deleteButton, 'deleteAll', function(){
